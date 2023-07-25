@@ -1,0 +1,9 @@
+.popup__field_pos_top {
+  padding-top: 46px;
+}
+
+@media screen and (max-width: 614px) {
+  .popup__field_pos_top {
+    padding-top: 76px;
+  }
+}

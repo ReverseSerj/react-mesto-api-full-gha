@@ -1,0 +1,10 @@
+.authen__input {
+  color:#FFFFFF;
+  background-color: transparent;
+  border: none;
+  min-width: 358px;
+  border-bottom: 2px solid #CCCCCC;
+  margin: 0 auto 30px;
+  padding-bottom: 10px;
+  outline:none;
+}
