@@ -9,7 +9,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.107.188
+IP 158.160.107.188
 
 Frontend https://mesto.petrov.nomoredomains.xyz
 
