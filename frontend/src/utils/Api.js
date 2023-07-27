@@ -1,9 +1,7 @@
 class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
-    this._cohort = options.cohort;
     this._token = options.token;
-    this._adress = `${options.baseUrl}${options.cohort}`;
     this._header =  {authorization: this._token};
     this._headerJSON = {
       authorization: this._token,
@@ -25,7 +23,7 @@ class Api {
       }
     }
 
-    return (fetch(`${this._adress}/${url}`, fetchConfig)
+    return (fetch(`${this._baseUrl}/${url}`, fetchConfig)
       .then((res) => {
         if(res.ok) {
           return res.json()
@@ -74,7 +72,6 @@ class Api {
 
 export const api = new Api({
   baseUrl: 'https://api.mesto.petrov.nomoredomains.xyz',
-  cohort: 'cohort-64',
   token: 'eb252b50-6915-4e03-a8a3-e61dab946d4a'
 });
 
