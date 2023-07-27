@@ -1,56 +1,54 @@
 class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
-    this._token = options.token;
-    this._header =  {authorization: this._token};
-    this._headerJSON = {
-      authorization: this._token,
-      'Content-Type': 'application/json'
-    }
-  }
+    this._headers = options.headers;
+};
 
-  queryHandler(url, method = 'GET', obj) {
-    let fetchConfig = {
-      method: method,
-      headers: this._header
-    }
 
-    if(obj) {
-      fetchConfig = {
-        method: method,
-        headers: this._headerJSON,
-        body: JSON.stringify(obj)
-      }
+_checkResponse(res) {
+    if (res.ok) {
+        return res.json();
+    } else {
+        return Promise.reject(`Ошибка: ${res.status}`);
     }
-
-    return (fetch(`${this._baseUrl}/${url}`, fetchConfig)
-      .then((res) => {
-        if(res.ok) {
-          return res.json()
-        }
-        return Promise.reject(res.status);
-      })
-    );
-  }
+};
 
   getInitialCards() {
-    return this.queryHandler('cards');
+    return this._request(`${this._baseUrl}/cards`, {
+      headers: this._headers,
+    })
   }
 
   getProfileInfo() {
-    return this.queryHandler('users/me');
+    return this._request(`${this._baseUrl}/users/me`, {
+      headers: this._headers,
+    })
   }
 
-  patchEditPorfile(obj) {
-    return this.queryHandler('users/me', 'PATCH', obj);
+  patchEditPorfile(name, about) {
+    return this._request(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+          name: name,
+          about: about,
+      }),
+    })
   }
 
-  addNewCard(obj) {
-    return this.queryHandler('cards', 'POST', obj);
+  addNewCard(data) {
+    return this._request(`${this._baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify(data)
+    })
   }
 
   delCard(id) {
-    return this.queryHandler(`cards/${id}`, 'DELETE');
+    return this._request(`${this._baseUrl}/cards/${id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    });
   }
 
   /*putLike(id) {
@@ -61,17 +59,33 @@ class Api {
     return this.queryHandler(`cards/${id}/likes`, 'DELETE');
   } */
 
-  updateAvatar(obj) {
-    return this.queryHandler('users/me/avatar', 'PATCH', obj);
+  updateAvatar(avatar) {
+    return this._request(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+          avatar: avatar
+      }),
+   })
   }
 
   changeLikeCardStatus(id, isLiked) {
-    return this.queryHandler(`cards/${id}/likes`, `${!isLiked ? 'DELETE' : 'PUT'}`);
+    return this._request(`${this._baseUrl}/cards/${id}/likes`, {
+      method: isLiked ? 'PUT' : 'DELETE',
+      headers: this._headers,
+    })
   }
+
+  setToken(token) {
+    this._headers.authorization = `Bearer ${token}`;
+  };
 }
 
 export const api = new Api({
   baseUrl: 'https://api.mesto.petrov.nomoredomains.xyz',
-  headers: this._headerJSON,
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('token')}`,
+    'content-type': 'application/json'
+  },
 });
 
