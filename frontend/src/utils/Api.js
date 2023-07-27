@@ -13,6 +13,10 @@ _checkResponse(res) {
     }
 };
 
+_request(url, options) {
+  return fetch(url, options).then(this._checkResponse);
+};
+
   getInitialCards() {
     return this._request(`${this._baseUrl}/cards`, {
       headers: this._headers,
