@@ -1,58 +1,58 @@
 class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
-};
-
-
-_checkResponse(res) {
-    if (res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(`Ошибка: ${res.status}`);
+    this._cohort = options.cohort;
+    this._token = options.token;
+    this._adress = `${options.baseUrl}${options.cohort}`;
+    this._header =  {authorization: this._token};
+    this._headerJSON = {
+      authorization: this._token,
+      'Content-Type': 'application/json'
     }
-};
+  }
 
-_request(url, options) {
-  return fetch(url, options).then(this._checkResponse);
-};
+  queryHandler(url, method = 'GET', obj) {
+    let fetchConfig = {
+      method: method,
+      headers: this._header
+    }
+
+    if(obj) {
+      fetchConfig = {
+        method: method,
+        headers: this._headerJSON,
+        body: JSON.stringify(obj)
+      }
+    }
+
+    return (fetch(`${this._adress}/${url}`, fetchConfig)
+      .then((res) => {
+        if(res.ok) {
+          return res.json()
+        }
+        return Promise.reject(res.status);
+      })
+    );
+  }
 
   getInitialCards() {
-    return this._request(`${this._baseUrl}/cards`, {
-      headers: this._headers,
-    })
+    return this.queryHandler('cards');
   }
 
   getProfileInfo() {
-    return this._request(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
-    })
+    return this.queryHandler('users/me');
   }
 
-  patchEditPorfile(name, about) {
-    return this._request(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-          name: name,
-          about: about,
-      }),
-    })
+  patchEditPorfile(obj) {
+    return this.queryHandler('users/me', 'PATCH', obj);
   }
 
-  addNewCard(data) {
-    return this._request(`${this._baseUrl}/cards`, {
-      method: 'POST',
-      headers: this._headers,
-      body: JSON.stringify(data)
-    })
+  addNewCard(obj) {
+    return this.queryHandler('cards', 'POST', obj);
   }
 
   delCard(id) {
-    return this._request(`${this._baseUrl}/cards/${id}`, {
-      method: 'DELETE',
-      headers: this._headers,
-    });
+    return this.queryHandler(`cards/${id}`, 'DELETE');
   }
 
   /*putLike(id) {
@@ -63,33 +63,18 @@ _request(url, options) {
     return this.queryHandler(`cards/${id}/likes`, 'DELETE');
   } */
 
-  updateAvatar(avatar) {
-    return this._request(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-          avatar: avatar
-      }),
-   })
+  updateAvatar(obj) {
+    return this.queryHandler('users/me/avatar', 'PATCH', obj);
   }
 
   changeLikeCardStatus(id, isLiked) {
-    return this._request(`${this._baseUrl}/cards/${id}/likes`, {
-      method: isLiked ? 'PUT' : 'DELETE',
-      headers: this._headers,
-    })
+    return this.queryHandler(`cards/${id}/likes`, `${!isLiked ? 'DELETE' : 'PUT'}`);
   }
-
-  setToken(token) {
-    this._headers.authorization = `Bearer ${token}`;
-  };
 }
 
 export const api = new Api({
   baseUrl: 'https://api.mesto.petrov.nomoredomains.xyz',
-  headers: {
-    authorization: `Bearer ${localStorage.getItem('token')}`,
-    'content-type': 'application/json'
-  },
+  cohort: 'cohort-64',
+  token: 'eb252b50-6915-4e03-a8a3-e61dab946d4a'
 });
 
