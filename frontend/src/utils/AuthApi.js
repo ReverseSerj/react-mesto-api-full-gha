@@ -12,8 +12,7 @@ class AuthApi {
 
     if(obj) {
       fetchConfig = {
-        method: method,
-        headers: this._headerJSON,
+        ...fetchConfig,
         body: JSON.stringify(obj)
       }
     }

@@ -17,7 +17,7 @@ class Api {
 
     if(obj) {
       fetchConfig = {
-        method: method,
+        ...fetchConfig,
         headers: this._headerJSON,
         body: JSON.stringify(obj)
       }
@@ -67,6 +67,15 @@ class Api {
 
   changeLikeCardStatus(id, isLiked) {
     return this.queryHandler(`cards/${id}/likes`, `${!isLiked ? 'DELETE' : 'PUT'}`);
+  }
+
+  setToken(token) {
+    this._token = `Bearer ${token}`;
+    this._header =  {authorization: this._token};
+    this._headerJSON = {
+      authorization: this._token,
+      'Content-Type': 'application/json'
+    }
   }
 }
 

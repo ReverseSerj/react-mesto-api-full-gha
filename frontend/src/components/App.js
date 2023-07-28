@@ -170,6 +170,7 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       authApi.setAuthToken(jwt);
+      api.setToken(jwt);
       authApi.getUserEmail()
       .then((data) => {
           setPreIsLoggedIn(true);
@@ -188,6 +189,7 @@ function App() {
         const jwt = localStorage.getItem('jwt');
       if (jwt) {
         authApi.setAuthToken(jwt);
+        api.setToken(jwt);
         authApi.getUserEmail()
         .then((data) => {
             setIsLoggedIn(true);
