@@ -111,6 +111,7 @@ function App() {
     setIsLoading(true);
     api.addNewCard(data)
       .then((newCard) => {
+        console.log(newCard);
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
@@ -175,7 +176,7 @@ function App() {
       .then((data) => {
           setPreIsLoggedIn(true);
           setIsLoggedIn(true);
-          setHeaderEmail(data.data.email);
+          setHeaderEmail(data.email);
           navigate('/');
       })
       .catch((err) => {
@@ -193,7 +194,7 @@ function App() {
         authApi.getUserEmail()
         .then((data) => {
             setIsLoggedIn(true);
-            setHeaderEmail(data.data.email);
+            setHeaderEmail(data.email);
             navigate('/');
         })
         .catch((err) => {
@@ -207,8 +208,10 @@ function App() {
     if (isLoggedIn) {
       Promise.all([api.getProfileInfo(), api.getInitialCards()])
       .then(([data, cards]) => {
+        console.log(data);
+        console.log(cards);
         setCurrentUser(data);
-        setCards(cards);
+        setCards(cards.reverse());
       })
       .catch((err) => {
         console.log(err);

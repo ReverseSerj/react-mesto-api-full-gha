@@ -81,6 +81,5 @@ class Api {
 
 export const api = new Api({
   baseUrl: 'https://api.mesto.petrov.nomoredomains.xyz',
-  token: 'eb252b50-6915-4e03-a8a3-e61dab946d4a'
 });
 

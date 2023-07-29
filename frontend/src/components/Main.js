@@ -24,9 +24,9 @@ function Main({cards, onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCa
           <button className="profile__add-post" type="button" onClick={onAddPlace}></button>
         </section>
         <ul className="elements">
-          {cards.map((card) => {
+          {cards.map((card, index) => {
             return (
-              <li key={card._id}>
+              <li key={index}>
                 <Card 
                   card={card} 
                   onCardClick={onCardClick}

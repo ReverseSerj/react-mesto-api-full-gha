@@ -3,7 +3,8 @@ const allowedCors = [
   'http://mesto.petrov.nomoredomains.xyz',
   'https://api.mesto.petrov.nomoredomains.xyz',
   'http://api.mesto.petrov.nomoredomains.xyz',
-  'http//:localhost:3000',
+  'http://localhost:3000',
+  'http://localhost:3001',
 ];
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 
